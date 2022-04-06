@@ -1,61 +1,132 @@
 import java.util.Scanner;
 
 public class CaesarCipher {
-    public static final String ALPHABET = "abcdefghijklmnopqrstuvwxyz";
 
-    public static String encrypt(String message, int shiftKey) {
-        message = message.toLowerCase();
-        String cipherText = "";
-        for (int ii = 0; ii < message.length(); ii++) {
-            int charPosition = ALPHABET.indexOf(message.charAt(ii));
-            int keyVal = (shiftKey + charPosition) % 26;
-            char replaceVal = ALPHABET.charAt(keyVal);
-            cipherText += replaceVal;
+    char [] input;
+    int key;
+
+    void encrypt()
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the String : ");
+        String ip = sc.nextLine();
+        input = ip.toCharArray();
+        System.out.print("Enter the key : ");
+        key = sc.nextInt();
+        for(int i=0;i<input.length;i++)
+        {
+            if(input[i] == ' ')
+                continue;
+            else
+            {
+                if(input[i] >='A' && input[i] <='Z')
+                {
+                    input[i] = (char) (key + input[i]);
+                    if(input[i] > 'Z')
+                    {
+                        input[i] = (char) (input[i] - 26);
+                    }
+                }
+                else
+                {
+                    input[i] = (char) (key + input[i]);
+                    if(input[i] > 'z')
+                    {
+                        input[i] = (char) (input[i] - 26);
+                    }
+                }
+            }
         }
-        return cipherText;
+        System.out.println("Encrypted String : " + String.valueOf(input) + "\n");
     }
 
-    public static String decrypt(String cipherText, int shiftKey) {
-        cipherText = cipherText.toLowerCase();
-        String message = "";
-        for (int ii = 0; ii < cipherText.length(); ii++) {
-            int charPosition = ALPHABET.indexOf(cipherText.charAt(ii));
-            int keyVal = (charPosition - shiftKey) % 26;
-            if (keyVal < 0) {
-                keyVal = ALPHABET.length() + keyVal;
+    void decrypt()
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the String : ");
+        String ip = sc.nextLine();
+        input = ip.toCharArray();
+        System.out.print("Enter the key : ");
+        key = sc.nextInt();
+        for(int i=0;i<input.length;i++)
+        {
+            if(input[i] == ' ')
+                continue;
+            else
+            {
+                if(input[i] >='A' && input[i] <='Z')
+                {
+                    input[i] = (char) (input[i] - key);
+                    if(input[i] < 'A')
+                    {
+                        input[i] = (char) (input[i] + 26);
+                    }
+                }
+                else
+                {
+                    input[i] = (char) (input[i] - key);
+                    if(input[i] < 'a')
+                    {
+                        input[i] = (char) (input[i] + 26);
+                    }
+                }
             }
-            char replaceVal = ALPHABET.charAt(keyVal);
-            message += replaceVal;
         }
-        return message;
+        System.out.println("Decrypted String : " + String.valueOf(input) + "\n");
+    }
+
+    void bruteforce()
+    {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the String : ");
+        String ip = sc.nextLine();
+        input = ip.toCharArray();
+        for(key=1;key<27;key++)
+        {
+            for(int i=0;i<input.length;i++)
+            {
+                if(input[i] == ' ')
+                    continue;
+                else
+                {
+                    if(input[i] >='A' && input[i] <='Z')
+                    {
+                        input[i] = (char) (input[i] - key);
+                        if(input[i] < 'A')
+                        {
+                            input[i] = (char) (input[i] + 26);
+                        }
+                    }
+                    else
+                    {
+                        input[i] = (char) (input[i] - key);
+                        if(input[i] < 'a')
+                        {
+                            input[i] = (char) (input[i] + 26);
+                        }
+                    }
+                }
+            }
+            System.out.println("Key = " + key + " Decrypted String : " + String.valueOf(input));
+            input = ip.toCharArray();
+        }
     }
 
     public static void main(String[] args) {
-        Scanner console = new Scanner(System.in);
-        System.out.println("\nChoose the desirable operation. \nFor encryption press 1. \nFor decryption press 2.");
-        int choice = console.nextInt();
-
-        if (choice == 1) {
-            String message = new String();
-            int key = 0;
-            System.out.print("Enter the String for Encryption:");
-            message = console.next();
-
-            System.out.println("\n\nEnter Shift Key:");
-            key = console.nextInt();
-            System.out.println("\nEncrpyted msg:" + encrypt(message, key));
-        }
-        else if (choice == 2) {
-            String message = new String();
-            int key = 0;
-            System.out.print("Enter the String for Decryption:");
-            message = console.next();
-
-            System.out.println("\n\nEnter Shift Key:");
-            key = console.nextInt();
-
-            System.out.println("\nDecrypted Message:" + decrypt(message, key));
-        }
+        Scanner sc = new Scanner(System.in);
+        int c;
+        do
+        {
+            System.out.println("1:Encryption\n2:Decryption\n3:Bruteforce\n4:Exit");
+            c = sc.nextInt();
+            switch(c)
+            {
+                case 1 : new CaesarCipher().encrypt(); break;
+                case 2 : new CaesarCipher().decrypt(); break;
+                case 3 : new CaesarCipher().bruteforce();  break;
+                case 4 : break;
+            }
+        }while(c!=4);
     }
 }
 
